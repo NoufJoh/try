@@ -27,6 +27,7 @@
   <link href="css/style.css" rel="stylesheet" />
   <!-- responsive style -->
   <link href="css/responsive.css" rel="stylesheet" />
+ 
 
 
 </head>
@@ -81,12 +82,17 @@
                 <div class="heading_container">
                     <h2>Pave the Way</h2>
                 </div>
+                <p>This webpage allows you to try out the YOLOv8 object detection model. You can upload an image and see the objects detected by the model.</p>
+              </div>       
                         <input id="uploadInput" type="file"/>
                         <button id="predictButton">Process</button>
-                        
+                        <div id="messageContainer"></div>
+         
             
-                </div>
+                
             </div>
+            
+
         </div>
 
 
@@ -99,17 +105,38 @@
        */
        const input = document.getElementById("uploadInput");
        const predictButton = document.getElementById("predictButton");
+       //const messageContainer = document.getElementById("messageContainer");
        //const backButton = document.getElementById("backButton");
        let boxes = [];
        input.addEventListener("change",async(event) => {
         //boxes = [];
-        draw_image(event.target.files[0]);
+        draw_image(event.target.files[0], 720, 720); // resize the image to fixed
         })
-
+/**
         predictButton.addEventListener("click",async(event) => {
             boxes = await detect_objects_on_image(input.files[0]);
-            draw_image_and_boxes(input.files[0],boxes);
+            draw_image_and_boxes(input.files[0],boxes, 640,640);
         })
+        */
+        predictButton.addEventListener("click", async (event) => {
+          console.log("Predict button clicked")
+          // Display a message to inform the user that the image is being processed
+          const messageElement = document.createElement("p");
+          messageElement.textContent = "Processing image, please wait...";
+          const messageContainer = document.getElementById("messageContainer");
+          messageContainer.appendChild(messageElement);
+
+          // Process the image
+          boxes = await detect_objects_on_image(input.files[0]);
+          draw_image_and_boxes(input.files[0], boxes, 720, 720);
+          // Remove the message after the image has been processed
+          messageContainer.removeChild(messageElement);
+          //messageElement: console.log(document.body.innerHTML);
+        });
+
+
+
+        //messageContainer.appendChild(messageElement);
 
             
 
@@ -216,7 +243,21 @@
        * @param file Uploaded file object
        * @param boxes Array of bounding boxes in format [[x1,y1,x2,y2,object_type,probability],...]
        */
-
+       function draw_image(file, maxWidth, maxHeight) {
+          const img = new Image();
+          img.src = URL.createObjectURL(file);
+          img.onload = () => {
+            const canvas = document.querySelector("canvas");
+            const widthRatio = maxWidth / img.width;
+            const heightRatio = maxHeight / img.height;
+            const ratio = Math.min(widthRatio, heightRatio);
+            canvas.width = img.width * ratio;
+            canvas.height = img.height * ratio;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          };
+        }
+/**
        function draw_image(file) {
             const img = new Image();
             img.src = URL.createObjectURL(file);
@@ -228,6 +269,7 @@
                 ctx.drawImage(img, 0, 0);
              };
         }
+        
 
       function draw_image_and_boxes(file,boxes) {
           const img = new Image()
@@ -256,6 +298,42 @@
                 }
           }
       }
+*/
+      function draw_image_and_boxes(file, boxes, maxWidth, maxHeight) {
+        const img = new Image();
+        img.src = URL.createObjectURL(file);
+        img.onload = () => {
+          const canvas = document.querySelector("canvas");
+          const widthRatio = maxWidth / img.width;
+          const heightRatio = maxHeight / img.height;
+          const ratio = Math.min(widthRatio, heightRatio);
+          canvas.width = img.width * ratio;
+          canvas.height = img.height * ratio;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          ctx.strokeStyle = "#00FF00";
+          ctx.lineWidth = 3;
+          ctx.font = "18px serif";
+          if (boxes.length === 0) {
+            ctx.fillStyle = "#008000";
+            ctx.fillText("No Detection", 10, 25);
+          } else {
+              boxes.forEach(([x1, y1, x2, y2, label]) => {
+                x1 *= ratio;
+                y1 *= ratio;
+                x2 *= ratio;
+                y2 *= ratio;
+                ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+                ctx.fillStyle = "#00ff00";
+                const width = ctx.measureText(label).width;
+                ctx.fillRect(x1, y1, width + 10, 25);
+                ctx.fillStyle = "#000000";
+                ctx.fillText(label, x1, y1 + 18);
+              });
+            }
+        };
+      }
+
 
 
      
