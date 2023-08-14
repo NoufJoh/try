@@ -66,18 +66,58 @@
         </div>
       </header>
       <!-- end header section -->
+    
 <body>
 
-    <h1>Welcome to YOLOv8 Object Detection</h1>
-    <p>This webpage allows you to try out the YOLOv8 object detection model. You can upload an image and see the objects detected by the model.</p>
-    <button id="tryModelButton">Try Model</button>
-
+ 
+     <section class="about_section layout_padding">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="detail-box">
+              <div class="heading_container">
+                
+                <h2>
+                  Welcome to Pave the Way!
+                </p>
+                </h2>
+              
+              </div>
+              <p>
+                Welcome to YOLOv8 Object Detection !  Our website utilizes advanced technology to detect and analyze road damages. Upload an image of a damaged road, and our model will swiftly identify and assess the extent of the damage. Experience the efficiency and accuracy of our road damage detection system to help prioritize repairs and ensure safer road conditions. Get started now and contribute to the maintenance and improvement of our road infrastructure.
+              </p>
+              <a href="model.html">
+            Try The model
+              </a>
+              <section class="home">
+                  <style>
+                    body {
+                      display: flex;
+                      justify-content: flex-end;
+                    }
+                
+                    img {
+                      max-width: 100%;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <img src="/images/road233.jpeg" alt="Description of the image">
+               
+                </section>
+            </div>
+          </div>
+       
+      </section>
+</body>
     <script>
-        const tryModelButton = document.getElementById("tryModelButton");
-        tryModelButton.addEventListener("click", () => {
-            window.location.href = "model.html";
-        });
+      document.getElementById("tryModelButton").addEventListener("click", function(event) {
+        event.preventDefault();
+        window.location.href = "model.html";
+      });
     </script>
+   
+  
   
 <script src="js/jquery-3.4.1.min.js"></script>
 <script src="js/bootstrap.js"></script>
