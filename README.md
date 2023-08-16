@@ -12,6 +12,7 @@
   <a href="https://noufjoh.github.io/try/" >
     <img src="https://github.com/NoufJoh/Pave-the-way-Capstone-Project/blob/main/imgs/PTW_logo.png" alt="Logo" width="400" height="220">
   </a>
+   <a href="https://noufjoh.github.io/try/" >
      <img src="https://github.com/NoufJoh/Pave-the-way-Capstone-Project/blob/main/imgs/XOR_logo.gif" alt="Logo" width="400" height="220">
   </a>
 </div>
